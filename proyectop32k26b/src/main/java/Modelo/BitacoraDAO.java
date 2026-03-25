@@ -269,7 +269,7 @@ public class BitacoraDAO {
     }
 
     // Query por rango de fechas
-    public List<clsBitacora> queryPorFechas(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+    public List<clsBitacora> queryPorFechas (String fechaInicio, String fechaFin) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -280,8 +280,8 @@ public class BitacoraDAO {
             conn = Conexion.getConnection();
             System.out.println("Ejecutando query: " + SQL_QUERY_POR_FECHAS);
             stmt = conn.prepareStatement(SQL_QUERY_POR_FECHAS);
-            stmt.setTimestamp(1, Timestamp.valueOf(fechaInicio));
-            stmt.setTimestamp(2, Timestamp.valueOf(fechaFin));
+            stmt.setString(1, fechaInicio);
+            stmt.setString(2, fechaFin);
             rs = stmt.executeQuery();
             while (rs.next()) {
                 int Bitcodigo    = rs.getInt("Bitcodigo");

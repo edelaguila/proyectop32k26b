@@ -376,12 +376,12 @@ public class MdiSeguridad extends javax.swing.JFrame {
     }//GEN-LAST:event_menuperfilUsuarioActionPerformed
 
     private void mIAplicacionPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mIAplicacionPerfilActionPerformed
-        // TODO add your handling code here:
-        //frmProcesoAplicacionPerfil ventana = new frmProcesoAplicacionPerfil();
-        //jDesktopPane1.add(ventana);
-        //Dimension desktopSize = jDesktopPane1.getSize();
-        //Dimension FrameSize = ventana.getSize();
-        //ventana.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.             height) / 2);
+        frmProcesoAplicacionPerfil ventana = new frmProcesoAplicacionPerfil();
+        jDesktopPane1.add(ventana);
+        Dimension desktopSize = jDesktopPane1.getSize();
+        Dimension FrameSize = ventana.getSize();
+        ventana.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.             height) / 2);
+        ventana.setVisible(true);
     }//GEN-LAST:event_mIAplicacionPerfilActionPerformed
 
     private void mnuProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProcesosActionPerformed

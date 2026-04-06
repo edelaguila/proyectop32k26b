@@ -129,11 +129,11 @@ public List<clsAplicaciones> obtenerDisponibles(int Percodigo) {
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
             asig = new clsAsignacionAplicacionPerfil(rs.getInt("Aplcodigo"), rs.getInt("Percodigo"));
-            asig.setAPLPins(rs.getString("APLPins").charAt(0));
-            asig.setAPLPsel(rs.getString("APLPsel").charAt(0));
-            asig.setAPLPupd(rs.getString("APLPupd").charAt(0));
-            asig.setAPLPdel(rs.getString("APLPdel").charAt(0));
-            asig.setAPLPrep(rs.getString("APLPrep").charAt(0));
+         asig.setAPLPins(rs.getString("APLPins"));
+         asig.setAPLPsel(rs.getString("APLPsel"));
+         asig.setAPLPupd(rs.getString("APLPupd"));
+         asig.setAPLPdel(rs.getString("APLPdel"));
+         asig.setAPLPrep(rs.getString("APLPrep"));
         }
     } catch (Exception e) { e.printStackTrace(); }
     return asig;

@@ -26,6 +26,10 @@ AplicacionesDAO dao = new AplicacionesDAO(); //inicializar llamada al DAO
     public frmAplicaciones() {
         initComponents();
         llenarTabla();
+        this.setClosable(true);
+        this.setIconifiable(true);
+        this.setMaximizable(true);
+        this.setResizable(true);
     }
     //método limpiar
     public void limpiar() {

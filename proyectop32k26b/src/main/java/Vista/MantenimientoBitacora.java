@@ -1,4 +1,4 @@
-//Dulce Marìa Martìnez Arèvalo 9959-24-4564
+//Astrid Fernanda Ruíz López - 9959 24 2976 Diseño y Correción de errores
 
 package Vista;
 

@@ -522,11 +522,11 @@ private void activarPermisos() {
             asig.setPercodigo(idPerfil);
             asig.setAplcodigo(idApp);
 
-            asig.setAPLPins(jRadioButton1.isSelected() ? 'S' : 'N'); // Insertar
-            asig.setAPLPsel(jRadioButton2.isSelected() ? 'S' : 'N'); // Seleccionar
-            asig.setAPLPupd(jRadioButton3.isSelected() ? 'S' : 'N'); // Actualizar
-            asig.setAPLPdel(jRadioButton4.isSelected() ? 'S' : 'N'); // Eliminar
-            asig.setAPLPrep(jRadioButton5.isSelected() ? 'S' : 'N'); // Reportes
+            asig.setAPLPins(jRadioButton1.isSelected() ? "S" : "N"); // Insertar
+           asig.setAPLPsel(jRadioButton2.isSelected() ? "S" : "N"); // Seleccionar
+            asig.setAPLPupd(jRadioButton3.isSelected() ? "S" : "N"); // Actualizar
+           asig.setAPLPdel(jRadioButton4.isSelected() ? "S" : "N"); // Eliminar
+           asig.setAPLPrep(jRadioButton5.isSelected() ? "S" : "N"); // Reportes
 
             //Llamar al DAO para guardar o actualizar
             AsignacionAplicacionPerfilDAO dao = new AsignacionAplicacionPerfilDAO();
@@ -582,11 +582,11 @@ private void activarPermisos() {
                 clsAsignacionAplicacionPerfil actual = dao.obtenerRegistroEspecifico(idApp, idPerfil);
 
                 if (actual != null) {
-                    jRadioButton1.setSelected(actual.getAPLPins() == 'S');
-                    jRadioButton2.setSelected(actual.getAPLPsel() == 'S');
-                    jRadioButton3.setSelected(actual.getAPLPupd() == 'S');
-                    jRadioButton4.setSelected(actual.getAPLPdel() == 'S');
-                    jRadioButton5.setSelected(actual.getAPLPrep() == 'S');
+                    jRadioButton1.setSelected(actual.getAPLPins() == "S");
+                    jRadioButton2.setSelected(actual.getAPLPsel() == "S");
+                    jRadioButton3.setSelected(actual.getAPLPupd() == "S");
+                    jRadioButton4.setSelected(actual.getAPLPdel() == "S");
+                    jRadioButton5.setSelected(actual.getAPLPrep() == "S");
                 } else {
                     limpiarPermisos(); // Si es nueva, todos desmarcados
                     activarPermisos();

@@ -319,6 +319,7 @@ public class MdiSeguridad extends javax.swing.JFrame {
         Dimension desktopSize = jDesktopPane1.getSize();
         Dimension FrameSize = ventana.getSize();
         ventana.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        ventana.setVisible(true);
     }//GEN-LAST:event_frmMantenimientoAplicacionesActionPerformed
 
     private void frmMantenimientoBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frmMantenimientoBitacoraActionPerformed

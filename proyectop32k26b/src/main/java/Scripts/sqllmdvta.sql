@@ -7,7 +7,6 @@
  * Created: 6/04/2026
  */
 
-CREATE DATABASE IF NOT EXISTS sig;
 USE sig;
 
 INSERT INTO aplicaciones (Aplcodigo, Aplnombre, Aplestado) VALUES (10010, 'AsignacionPerfilUsuario', '1');

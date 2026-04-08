@@ -6,4 +6,5 @@
 USE sig;
 
 
-INSERT INTO `perfiles` (percodigo, pernombre, perestado) VALUES (10007, 'Mantenimiento perfil', '1');
+
+INSERT INTO aplicaciones (Aplcodigo, Aplnombre, Aplestado) VALUES (10007, 'Mantenimiento Perfil', '1');

@@ -18,12 +18,12 @@ import javax.swing.JOptionPane;
  *
  * @author ferito
  */
-public class frmAplicaciones extends javax.swing.JInternalFrame {
+public class frmMantenimientoAplicaciones extends javax.swing.JInternalFrame {
 AplicacionesDAO dao = new AplicacionesDAO(); //inicializar llamada al DAO
     /**
      * Creates new form AplicacionesForm
      */
-    public frmAplicaciones() {
+    public frmMantenimientoAplicaciones() {
         initComponents();
         llenarTabla();
         this.setClosable(true);
@@ -400,20 +400,21 @@ AplicacionesDAO dao = new AplicacionesDAO(); //inicializar llamada al DAO
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMantenimientoAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMantenimientoAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMantenimientoAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMantenimientoAplicaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmAplicaciones().setVisible(true);
+                new frmMantenimientoAplicaciones().setVisible(true);
             }
         });
     }

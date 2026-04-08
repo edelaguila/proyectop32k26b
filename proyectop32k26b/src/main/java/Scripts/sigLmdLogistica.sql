@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO aplicaciones (Aplcodigo, Aplnombre, Aplestado) VALUES
-(2, 'barcelonaFansApp', '1'),
-(3, 'eBooksGuatemala', '1');
+(10, 'Mantenimiento Usuarios', '1'),
+(11, 'Mantenimiento Aplicaciones', '1');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

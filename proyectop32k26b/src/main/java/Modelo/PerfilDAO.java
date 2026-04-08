@@ -2,7 +2,6 @@ package Modelo;
 
 import Controlador.clsPerfil;
 import Controlador.clsBitacora;
-import Vista.frmMantenimientoPerfil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

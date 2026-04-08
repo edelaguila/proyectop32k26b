@@ -32,7 +32,7 @@ import Modelo.PerfilDAO;
 
 
 
-public class MantenimientoAsignacionPerfilUsuario extends javax.swing.JFrame {
+public class frmProcesoPerfilUsuario extends javax.swing.JFrame {
 
 
 private static final int Aplcodigo = 10010; 
@@ -71,7 +71,7 @@ private static final int Aplcodigo = 10010;
     /**
      * Creates new form MantenimientoAsignacionPerfilUsuario
      */
-    public MantenimientoAsignacionPerfilUsuario() {
+    public frmProcesoPerfilUsuario() {
         initComponents();
         llenarComboUsuario();
     }
@@ -420,20 +420,21 @@ private static final int Aplcodigo = 10010;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoAsignacionPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmProcesoPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoAsignacionPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmProcesoPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoAsignacionPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmProcesoPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoAsignacionPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmProcesoPerfilUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MantenimientoAsignacionPerfilUsuario().setVisible(true);
+                new frmProcesoPerfilUsuario().setVisible(true);
             }
         });
     }

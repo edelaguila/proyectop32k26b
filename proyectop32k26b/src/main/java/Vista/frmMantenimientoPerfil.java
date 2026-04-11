@@ -1,9 +1,10 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//Created by Marlon
+//Meilyn’s update(bitacora)
 package Vista;
 
 import Controlador.clsSeguridad;
@@ -22,6 +23,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JOptionPane;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 
 
@@ -30,7 +33,7 @@ import javax.swing.JOptionPane;
  * @author visitante
  */
 public class frmMantenimientoPerfil extends javax.swing.JInternalFrame {
-    
+    private static final int Aplcodigo = 10007;
 
     public frmMantenimientoPerfil() {
         initComponents();
@@ -41,44 +44,37 @@ public class frmMantenimientoPerfil extends javax.swing.JInternalFrame {
     
     
     
-    
     private clsBitacora crearBitacora(String accion) {
-    clsBitacora bitacora = new clsBitacora();
 
-    try {
-        BitacoraDAO dao = new BitacoraDAO();
-
-        // Usuario conectado (este era tu error principal)
-        bitacora.setUsucodigo(1);
-        int usuario = 1; // valor por defecto
+        clsBitacora bitacora = new clsBitacora();
 
         try {
-        usuario = clsUsuarioConectado.getUsuId();
+            int usuario = 1;
+
+            try {
+                usuario = clsUsuarioConectado.getUsuId();
+            } catch (Exception e) {
+                System.out.println("Usuario no definido, usando default");
+            }
+
+            bitacora.setUsucodigo(usuario);
+            bitacora.setAplcodigo(10007);
+
+            bitacora.setBitfecha(
+                    new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(new java.util.Date())
+            );
+
+            bitacora.setBitip(java.net.InetAddress.getLocalHost().getHostAddress());
+            bitacora.setBitequipo(java.net.InetAddress.getLocalHost().getHostName());
+            bitacora.setBitaccion(accion);
+
         } catch (Exception e) {
-    System.out.println("Usuario no definido, usando default");
+            e.printStackTrace();
+        }
+
+        return bitacora;
     }
-
-bitacora.setUsucodigo(usuario);
-
-        // Código de aplicación (puedes dejar fijo si no tienes sistema de apps)
-        bitacora.setAplcodigo(1);
-
-        // Fecha actual
-        bitacora.setBitfecha(dao.fechaActual());
-
-        // IP y nombre del equipo
-        bitacora.setBitip(java.net.InetAddress.getLocalHost().getHostAddress());
-        bitacora.setBitequipo(java.net.InetAddress.getLocalHost().getHostName());
-
-        // Acción
-        bitacora.setBitaccion(accion);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return bitacora;
-}
     
 
     

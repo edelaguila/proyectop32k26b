@@ -481,6 +481,14 @@ public class frmMantenimientoBitacora extends javax.swing.JInternalFrame {
                     javax.swing.JOptionPane.WARNING_MESSAGE);
                 return;
             }
+            //Buscar por perfil
+        case "perfil":
+            if (txtBuscar.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Ingrese un código de perfil", "Advertencia",
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             //busca por accion
             buscarPorAccion();
             break;

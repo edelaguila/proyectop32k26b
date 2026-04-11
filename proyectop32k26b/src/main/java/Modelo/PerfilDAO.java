@@ -1,3 +1,5 @@
+//Created by Mario
+//Meilyn’s update, (bitacora)
 package Modelo;
 
 import Controlador.clsPerfil;
@@ -57,8 +59,9 @@ public class PerfilDAO {
                 lista.add(p);
             }
 
-            //bitacora.setBitaccion("SELECT perfiles");
-            //insertarBitacora(bitacora);
+            //BITACORA
+            bitacora.setBitaccion("SELECT perfiles");
+            insertarBitacora(bitacora);
 
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -85,8 +88,9 @@ public class PerfilDAO {
 
             rows = stmt.executeUpdate();
 
+            //BITACORA
             bitacora.setBitaccion("INSERT perfil " + perfil.getPernombre());
-            insertarBitacora(bitacora);
+            insertarBitacora(bitacora);//para guardar bitacora
 
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -171,8 +175,9 @@ public class PerfilDAO {
                 perfil.setPerestado(rs.getString("perestado"));
             }
 
-            //bitacora.setBitaccion("SELECT perfil ID " + id);
-            //insertarBitacora(bitacora);
+            //BITACORA 
+            bitacora.setBitaccion("SELECT perfil ID " + id);
+            insertarBitacora(bitacora);
 
         } catch (SQLException e) {
             e.printStackTrace(System.out);

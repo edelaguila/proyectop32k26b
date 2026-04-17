@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 
-// 3. Los Modelos y Controladores
 import Controlador.clsAsignacionPerfilUsuario; 
 import Modelo.AsignacionPerfilUsuarioDAO;    
 import Controlador.clsUsuario;               
@@ -32,7 +31,7 @@ import Modelo.PerfilDAO;
 
 
 
-public class frmProcesoPerfilUsuario extends javax.swing.JFrame {
+public class frmProcesoPerfilUsuario extends javax.swing.JInternalFrame {
 
 
 private static final int Aplcodigo = 10010; 
@@ -61,9 +60,35 @@ private static final int Aplcodigo = 10010;
     public void llenarTablas(int idUsuario) {
         
         DefaultTableModel modeloDisp = (DefaultTableModel) tablaDisponibles.getModel();
-        DefaultTableModel modeloAsig = (DefaultTableModel) tablaAsignados.getModel();
-        modeloDisp.setRowCount(0); 
-        modeloAsig.setRowCount(0); 
+    DefaultTableModel modeloAsig = (DefaultTableModel) tablaAsignados.getModel();
+    modeloDisp.setRowCount(0); 
+    modeloAsig.setRowCount(0); 
+
+    try {
+        // 1. Obtenemos todos los perfiles existentes
+        // Creamos una bitácora vacía solo para cumplir con el requisito del PerfilDAO
+        Controlador.clsBitacora bitTemp = new Controlador.clsBitacora();
+        PerfilDAO daoPerfil = new PerfilDAO();
+        List<Controlador.clsPerfil> todosLosPerfiles = daoPerfil.obtenerPerfiles(bitTemp);
+
+        // 2. Usamos tu AsignacionPerfilUsuarioDAO para ver cuáles ya tiene el usuario
+        AsignacionPerfilUsuarioDAO daoAsignacion = new AsignacionPerfilUsuarioDAO();
+
+        for (Controlador.clsPerfil perfil : todosLosPerfiles) {
+            // Usamos tu método .buscar(usuario, perfil) para saber si ya existe la relación
+            boolean existe = daoAsignacion.buscar(idUsuario, perfil.getPercodigo());
+
+            if (existe) {
+                // Si ya existe, va a la tabla de ASIGNADOS (derecha)
+                modeloAsig.addRow(new Object[]{perfil.getPercodigo(), perfil.getPernombre()});
+            } else {
+                // Si no existe, va a la tabla de DISPONIBLES (izquierda)
+                modeloDisp.addRow(new Object[]{perfil.getPercodigo(), perfil.getPernombre(), perfil.getPerestado()});
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Error en llenarTablas: " + e);
+    }
     
         //Este metódo lo podré terminar hasta la modificacion de los errores de PerfilDAO
 }
@@ -71,10 +96,37 @@ private static final int Aplcodigo = 10010;
     /**
      * Creates new form MantenimientoAsignacionPerfilUsuario
      */
-    public frmProcesoPerfilUsuario() {
-        initComponents();
-        llenarComboUsuario();
+   public frmProcesoPerfilUsuario() {
+       
+    initComponents(); 
+    
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    this.setClosable(true);
+    this.setIconifiable(true);
+    this.setMaximizable(true);
+    this.setResizable(true);
+    this.setSize(800, 600); 
+    
+    llenarComboUsuario();
+    Modelo.UsuarioDAO usuarioDAO = new Modelo.UsuarioDAO();
+    List<Controlador.clsUsuario> usuarios = usuarioDAO.consultaUsuarios(); 
+    
+    // 1. Limpiamos los combos
+    cboUsuario.removeAllItems();
+    cboUsuarioId.removeAllItems();
+    
+    // 2. Llenamos ambos combos
+    for (Controlador.clsUsuario usuario : usuarios) {
+        cboUsuario.addItem(usuario.getUsuNombre()); 
+        cboUsuarioId.addItem(String.valueOf(usuario.getUsuId())); 
     }
+    
+    // 3. Forzamos una selección inicial solo si hay datos
+    if (cboUsuario.getItemCount() > 0) {
+        cboUsuario.setSelectedIndex(0);
+        cboUsuarioId.setSelectedIndex(0);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,11 +153,13 @@ private static final int Aplcodigo = 10010;
         btnAsignarTodos = new javax.swing.JButton();
         btnQuitarTodos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("MANTENIMIENTO ASIGNACIÓN PERFIL USUARIO.");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 23, -1, -1));
 
         jLabel2.setText("Usuario");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 62, -1, -1));
 
         cboUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -113,8 +167,10 @@ private static final int Aplcodigo = 10010;
                 cboUsuarioActionPerformed(evt);
             }
         });
+        getContentPane().add(cboUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 57, 154, -1));
 
         jLabel3.setText("Codigo Usuario: ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(458, 62, -1, -1));
 
         cboUsuarioId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboUsuarioId.addActionListener(new java.awt.event.ActionListener() {
@@ -122,8 +178,10 @@ private static final int Aplcodigo = 10010;
                 cboUsuarioIdActionPerformed(evt);
             }
         });
+        getContentPane().add(cboUsuarioId, new org.netbeans.lib.awtextra.AbsoluteConstraints(552, 57, 153, -1));
 
         jLabel4.setText("PERFILES DISPONIBLES:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 123, -1, -1));
 
         tablaDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -138,7 +196,10 @@ private static final int Aplcodigo = 10010;
         ));
         jScrollPane1.setViewportView(tablaDisponibles);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 151, 360, -1));
+
         jLabel5.setText("PERFILES ");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(458, 123, -1, -1));
 
         tablaAsignados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -153,6 +214,8 @@ private static final int Aplcodigo = 10010;
         ));
         jScrollPane2.setViewportView(tablaAsignados);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(458, 151, 343, -1));
+
         btnAsignarUno.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnAsignarUno.setText(">");
         btnAsignarUno.addActionListener(new java.awt.event.ActionListener() {
@@ -160,6 +223,7 @@ private static final int Aplcodigo = 10010;
                 btnAsignarUnoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAsignarUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 232, -1, -1));
 
         btnQuitarUno.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnQuitarUno.setText("<");
@@ -168,6 +232,7 @@ private static final int Aplcodigo = 10010;
                 btnQuitarUnoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnQuitarUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(401, 350, -1, -1));
 
         btnAsignarTodos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnAsignarTodos.setText(">>");
@@ -176,6 +241,7 @@ private static final int Aplcodigo = 10010;
                 btnAsignarTodosActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAsignarTodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 286, -1, -1));
 
         btnQuitarTodos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnQuitarTodos.setText("<<");
@@ -184,88 +250,7 @@ private static final int Aplcodigo = 10010;
                 btnQuitarTodosActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(376, 376, 376)
-                                .addComponent(btnAsignarTodos)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cboUsuarioId, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(31, 31, 31)
-                                                .addComponent(btnAsignarUno))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(35, 35, 35)
-                                                .addComponent(btnQuitarUno)))
-                                        .addGap(40, 40, 40))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnQuitarTodos)
-                                        .addGap(25, 25, 25)))))))
-                .addContainerGap(9, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(cboUsuarioId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(btnAsignarUno)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAsignarTodos)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnQuitarUno)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnQuitarTodos)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        getContentPane().add(btnQuitarTodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 412, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -362,12 +347,10 @@ private static final int Aplcodigo = 10010;
         int resultado = asignacionDAO.insertar(idUsuarioDestino, idPerfil);
 
         if (resultado > 0) {
-            bitacoraDAO.insert(idUsuarioConectado, Aplcodigo, "ASIGNAR UN PERFIL");
-            // Refrescar las tablas para que el cambio sea real
-            
-            llenarTablas(idUsuarioDestino); 
-            JOptionPane.showMessageDialog(null, "Perfil asignado con éxito.");
-        }
+           bitacoraDAO.insert(idUsuarioConectado, Aplcodigo, "ASIGNÓ PERFIL: " + idPerfil);
+           llenarTablas(idUsuarioDestino); // Refresca las tablas
+           JOptionPane.showMessageDialog(null, "Asignación exitosa");
+            }
     } else {
         JOptionPane.showMessageDialog(null, "Selecciona un perfil de la tabla de disponibles.");
     }
@@ -378,28 +361,24 @@ private static final int Aplcodigo = 10010;
 
     private void cboUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboUsuarioActionPerformed
                                       
-
-    if (cboUsuario.getSelectedIndex() != -1) {
-
-        cboUsuarioId.setSelectedIndex(cboUsuario.getSelectedIndex());
-        
-
-        int idSeleccionado = Integer.parseInt(cboUsuarioId.getSelectedItem().toString());
-        llenarTablas(idSeleccionado);
+if (cboUsuario.getItemCount() > 0 && cboUsuario.getSelectedIndex() != -1) {
+        if (cboUsuarioId.getItemCount() > cboUsuario.getSelectedIndex()) {
+            cboUsuarioId.setSelectedIndex(cboUsuario.getSelectedIndex());
+            
+            int idSeleccionado = Integer.parseInt(cboUsuarioId.getSelectedItem().toString());
+            llenarTablas(idSeleccionado);
+        }
     }
-
-        
+       
         // TODO add your handling code here:
     }//GEN-LAST:event_cboUsuarioActionPerformed
 
     private void cboUsuarioIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboUsuarioIdActionPerformed
-
-        if (cboUsuarioId.getSelectedIndex() != -1) {
-            
-        // Sincroniza el índice del combo de nombres con el de IDs
-        cboUsuario.setSelectedIndex(cboUsuarioId.getSelectedIndex());
+        if (cboUsuarioId.getItemCount() > 0 && cboUsuarioId.getSelectedIndex() != -1) {
+        if (cboUsuario.getItemCount() > cboUsuarioId.getSelectedIndex()) {
+            cboUsuario.setSelectedIndex(cboUsuarioId.getSelectedIndex());
+        }
     }
-        
         // TODO add your handling code here:
     }//GEN-LAST:event_cboUsuarioIdActionPerformed
 

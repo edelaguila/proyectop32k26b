@@ -251,28 +251,7 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
     }//GEN-LAST:event_chkEstadoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        clsDepartamento departamento = new clsDepartamento();
-
-        departamento.setDepnombre(txtNombre.getText());
-
-        if (chkEstado.isSelected()) {
-            departamento.setDepestado(1);
-        } else {
-            departamento.setDepestado(0);
-        }
-
-        DepartamentoDAO dao = new DepartamentoDAO();
-
-        clsBitacora bitacora = new clsBitacora();
-
-        int resultado = dao.insertarDepartamento(departamento, bitacora);
-
-        if (resultado > 0) {
-            JOptionPane.showMessageDialog(null, "Registro guardado");
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al guardar");
-        }
+      
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

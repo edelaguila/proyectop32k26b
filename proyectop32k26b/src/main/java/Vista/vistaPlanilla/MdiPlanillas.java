@@ -49,7 +49,7 @@ public class MdiPlanillas extends javax.swing.JFrame {
         salirPlanillas = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         manDepartamento = new javax.swing.JMenuItem();
-        frmMantenimientoPerfiles5 = new javax.swing.JMenuItem();
+        frmMantenimientoPuesto = new javax.swing.JMenuItem();
         frmMantenimientoPerfiles6 = new javax.swing.JMenuItem();
         frmMantenimientoPerfiles7 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -104,13 +104,13 @@ public class MdiPlanillas extends javax.swing.JFrame {
         });
         jMenu2.add(manDepartamento);
 
-        frmMantenimientoPerfiles5.setText("Puestos");
-        frmMantenimientoPerfiles5.addActionListener(new java.awt.event.ActionListener() {
+        frmMantenimientoPuesto.setText("Puestos");
+        frmMantenimientoPuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                frmMantenimientoPerfiles5ActionPerformed(evt);
+                frmMantenimientoPuestoActionPerformed(evt);
             }
         });
-        jMenu2.add(frmMantenimientoPerfiles5);
+        jMenu2.add(frmMantenimientoPuesto);
 
         frmMantenimientoPerfiles6.setText("Empleados");
         frmMantenimientoPerfiles6.addActionListener(new java.awt.event.ActionListener() {
@@ -308,9 +308,11 @@ public class MdiPlanillas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_frmMantenimientoPerfiles6ActionPerformed
 
-    private void frmMantenimientoPerfiles5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frmMantenimientoPerfiles5ActionPerformed
+    private void frmMantenimientoPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frmMantenimientoPuestoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_frmMantenimientoPerfiles5ActionPerformed
+        frmMantenimientoPuesto vista = new frmmantenimientoPuesto();
+        vista.setVisible(true);
+    }//GEN-LAST:event_frmMantenimientoPuestoActionPerformed
 
     private void frmMantenimientoPerfiles7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frmMantenimientoPerfiles7ActionPerformed
         // TODO add your handling code here:
@@ -407,10 +409,10 @@ public class MdiPlanillas extends javax.swing.JFrame {
     private javax.swing.JMenuItem frmMantenimientoPerfiles16;
     private javax.swing.JMenuItem frmMantenimientoPerfiles17;
     private javax.swing.JMenuItem frmMantenimientoPerfiles4;
-    private javax.swing.JMenuItem frmMantenimientoPerfiles5;
     private javax.swing.JMenuItem frmMantenimientoPerfiles6;
     private javax.swing.JMenuItem frmMantenimientoPerfiles7;
     private javax.swing.JMenuItem frmMantenimientoPerfiles8;
+    private javax.swing.JMenuItem frmMantenimientoPuesto;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

@@ -3,11 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista.vistaPlanilla;
+import Modelo.modeloPlanilla.PuestoDAO;
 import Controlador.controladorPlanilla.clsPuesto;
 import Controlador.clsBitacora;
-import Modelo.modeloPlanilla.PuestoDAO;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,34 +14,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author andre
  */
-public class frmMantenimientoPuesto extends javax.swing.JFrame {
+public class frmPuesto extends javax.swing.JFrame {
 
-  public frmMantenimientoPuesto() {
+    /**
+     * Creates new form frmPuesto
+     */
+    public frmPuesto() {
         initComponents();
-        cargarTabla();
     }
-    
-    public void cargarTabla() {
-        PuestoDAO dao = new PuestoDAO();
-        tblPuesto.setModel(dao.listarPuestosEnTabla());
-    }
-    private void limpiarFormulario() {
-    CodigoPuesto.setText("");
-    NombrePuesto.setText("");
-    txtBuscar.setText("");
-    NombrePuesto.requestFocus();
-}
-
-private void habilitarCampos(boolean habilitar) {
-    NombrePuesto.setEnabled(habilitar);
-    btnGuardar.setEnabled(habilitar);
-    btnModificar.setEnabled(habilitar);
-    btnEliminar.setEnabled(habilitar);
-}
-}
-
-   
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,25 +32,52 @@ private void habilitarCampos(boolean habilitar) {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnBuscar = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
+        btnNuevo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnModificar = new javax.swing.JButton();
         CodigoPuesto = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPuesto = new javax.swing.JTable();
         NombrePuesto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
-        txtBuscar = new javax.swing.JTextField();
-        btnNuevo = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblPuesto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnBuscar.setText("ok");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("MANTENIMIENTO DE PUESTO");
+
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         CodigoPuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,7 +85,19 @@ private void habilitarCampos(boolean habilitar) {
             }
         });
 
+        jLabel5.setText("Buscar por código:");
+
         jLabel2.setText("Codigo");
+
+        tblPuesto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Nombre"
+            }
+        ));
+        jScrollPane1.setViewportView(tblPuesto);
 
         NombrePuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,45 +128,6 @@ private void habilitarCampos(boolean habilitar) {
             }
         });
 
-        btnBuscar.setText("ok");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-
-        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBuscarActionPerformed(evt);
-            }
-        });
-
-        btnNuevo.setText("Nuevo");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-
-        btnModificar.setText("Modificar");
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Buscar por código:");
-
-        tblPuesto.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Codigo", "Nombre"
-            }
-        ));
-        jScrollPane1.setViewportView(tblPuesto);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,7 +145,7 @@ private void habilitarCampos(boolean habilitar) {
                             .addComponent(CodigoPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NombrePuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 172, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))))
             .addGroup(layout.createSequentialGroup()
@@ -227,11 +206,104 @@ private void habilitarCampos(boolean habilitar) {
                         .addGap(42, 42, 42))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(23, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+
+        // TODO add your handling code here:
+        if (txtBuscar.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un código para buscar");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(txtBuscar.getText());
+
+            PuestoDAO dao = new PuestoDAO();
+            clsBitacora bitacora = new clsBitacora();
+            clsPuesto puesto = dao.obtenerPuestoPorId(id, bitacora);
+
+            if (puesto != null) {
+                CodigoPuesto.setText(String.valueOf(puesto.getPuecodigo()));
+                NombrePuesto.setText(puesto.getPuenombre());
+
+                NombrePuesto.setEnabled(true);
+                btnGuardar.setEnabled(false);
+                btnModificar.setEnabled(true);
+                btnEliminar.setEnabled(true);
+                btnNuevo.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Puesto no encontrado");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ingrese un código válido");
+        }
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        CodigoPuesto.setText("");
+        NombrePuesto.setText("");
+        txtBuscar.setText("");
+
+        NombrePuesto.requestFocus();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+
+        if (CodigoPuesto.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Seleccione un puesto para modificar");
+            return;
+        }
+
+        if (NombrePuesto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre del puesto");
+            NombrePuesto.requestFocus();
+            return;
+        }
+
+        clsPuesto puesto = new clsPuesto();
+        puesto.setPuecodigo(Integer.parseInt(CodigoPuesto.getText()));
+        puesto.setPuenombre(NombrePuesto.getText());
+
+        PuestoDAO dao = new PuestoDAO();
+        clsBitacora bitacora = new clsBitacora();
+
+        int resultado = dao.actualizarPuesto(puesto, bitacora);
+
+        if (resultado > 0) {
+            JOptionPane.showMessageDialog(null, "Registro modificado");
+
+            // Recargar la tabla manualmente
+            DefaultTableModel modelo = dao.listarPuestosEnTabla();
+            tblPuesto.setModel(modelo);
+
+            // Limpiar formulario
+            CodigoPuesto.setText("");
+            NombrePuesto.setText("");
+            txtBuscar.setText("");
+            NombrePuesto.requestFocus();
+
+            // Deshabilitar campos
+            NombrePuesto.setEnabled(false);
+            btnGuardar.setEnabled(false);
+            btnModificar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+            btnNuevo.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al modificar");
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     private void CodigoPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CodigoPuestoActionPerformed
         // TODO add your handling code here:
@@ -243,154 +315,60 @@ private void habilitarCampos(boolean habilitar) {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-    clsPuesto puesto = new clsPuesto();
+        clsPuesto puesto = new clsPuesto();
 
-puesto.setPuenombre(NombrePuesto.getText());
+        puesto.setPuenombre(NombrePuesto.getText());
 
-PuestoDAO dao = new PuestoDAO();
+        PuestoDAO dao = new PuestoDAO();
 
-clsBitacora bitacora = new clsBitacora();
+        clsBitacora bitacora = new clsBitacora();
 
-int resultado = dao.insertarPuesto(puesto, bitacora);
+        int resultado = dao.insertarPuesto(puesto, bitacora);
 
-if (resultado > 0) {
-    JOptionPane.showMessageDialog(null, "Registro guardado");
-    NombrePuesto.setText("");
-    CodigoPuesto.setText("");
-    txtBuscar.setText("");
-    NombrePuesto.requestFocus();
-} else {
-    JOptionPane.showMessageDialog(null, "Error al guardar");
-}
+        if (resultado > 0) {
+            JOptionPane.showMessageDialog(null, "Registro guardado");
+            NombrePuesto.setText("");
+            CodigoPuesto.setText("");
+            txtBuscar.setText("");
+            NombrePuesto.requestFocus();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         clsPuesto puesto = new clsPuesto();
 
-puesto.setPuecodigo(Integer.parseInt(CodigoPuesto.getText()));
+        puesto.setPuecodigo(Integer.parseInt(CodigoPuesto.getText()));
 
-PuestoDAO dao = new PuestoDAO();
-
-clsBitacora bitacora = new clsBitacora();
-
-int resultado = dao.eliminarPuesto(puesto, bitacora);
-
-if (resultado > 0) {
-    JOptionPane.showMessageDialog(null, "Registro eliminado");
-
-    CodigoPuesto.setText("");
-    NombrePuesto.setText("");
-    txtBuscar.setText("");
-
-    NombrePuesto.setEnabled(false);
-    btnGuardar.setEnabled(false);
-    btnModificar.setEnabled(false);
-    btnEliminar.setEnabled(false);
-    btnNuevo.setEnabled(true);
-} else {
-    JOptionPane.showMessageDialog(null, "Error al eliminar");
-}
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-                                       
-    // TODO add your handling code here:
-    if (txtBuscar.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Ingrese un código para buscar");
-        return;
-    }
-    
-    try {
-        int id = Integer.parseInt(txtBuscar.getText());
-        
         PuestoDAO dao = new PuestoDAO();
+
         clsBitacora bitacora = new clsBitacora();
-        clsPuesto puesto = dao.obtenerPuestoPorId(id, bitacora);
-        
-        if (puesto != null) {
-            CodigoPuesto.setText(String.valueOf(puesto.getPuecodigo()));
-            NombrePuesto.setText(puesto.getPuenombre());
-            
-            NombrePuesto.setEnabled(true);
+
+        int resultado = dao.eliminarPuesto(puesto, bitacora);
+
+        if (resultado > 0) {
+            JOptionPane.showMessageDialog(null, "Registro eliminado");
+
+            CodigoPuesto.setText("");
+            NombrePuesto.setText("");
+            txtBuscar.setText("");
+
+            NombrePuesto.setEnabled(false);
             btnGuardar.setEnabled(false);
-            btnModificar.setEnabled(true);
-            btnEliminar.setEnabled(true);
+            btnModificar.setEnabled(false);
+            btnEliminar.setEnabled(false);
             btnNuevo.setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Puesto no encontrado");
+            JOptionPane.showMessageDialog(null, "Error al eliminar");
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Ingrese un código válido");
-    }
-
-
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        // TODO add your handling code here:
-     CodigoPuesto.setText("");
-NombrePuesto.setText("");
-txtBuscar.setText("");
-
-NombrePuesto.requestFocus();
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-
-if (CodigoPuesto.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Seleccione un puesto para modificar");
-        return;
-    }
-    
-    if (NombrePuesto.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Ingrese el nombre del puesto");
-        NombrePuesto.requestFocus();
-        return;
-    }
-    
-    clsPuesto puesto = new clsPuesto();
-    puesto.setPuecodigo(Integer.parseInt(CodigoPuesto.getText()));
-    puesto.setPuenombre(NombrePuesto.getText());
-    
-    PuestoDAO dao = new PuestoDAO();
-    clsBitacora bitacora = new clsBitacora();
-    
-    int resultado = dao.actualizarPuesto(puesto, bitacora);
-    
-    if (resultado > 0) {
-        JOptionPane.showMessageDialog(null, "Registro modificado");
-        
-        // Recargar la tabla manualmente
-        DefaultTableModel modelo = dao.listarPuestosEnTabla();
-        tblPuesto.setModel(modelo);
-        
-        // Limpiar formulario
-        CodigoPuesto.setText("");
-        NombrePuesto.setText("");
-        txtBuscar.setText("");
-        NombrePuesto.requestFocus();
-        
-        // Deshabilitar campos
-        NombrePuesto.setEnabled(false);
-        btnGuardar.setEnabled(false);
-        btnModificar.setEnabled(false);
-        btnEliminar.setEnabled(false);
-        btnNuevo.setEnabled(true);
-    } else {
-        JOptionPane.showMessageDialog(null, "Error al modificar");
-    }
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBuscarActionPerformed
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -409,22 +387,22 @@ if (CodigoPuesto.getText().isEmpty()) {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmMantenimientoPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmMantenimientoPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmMantenimientoPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmMantenimientoPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmMantenimientoPuesto().setVisible(true);
+                new frmPuesto().setVisible(true);
             }
-        };
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -444,3 +422,4 @@ if (CodigoPuesto.getText().isEmpty()) {
     private javax.swing.JTable tblPuesto;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
+}

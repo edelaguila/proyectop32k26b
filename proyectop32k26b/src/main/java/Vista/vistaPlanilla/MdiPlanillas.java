@@ -310,7 +310,7 @@ public class MdiPlanillas extends javax.swing.JFrame {
 
     private void frmMantenimientoPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frmMantenimientoPuestoActionPerformed
         // TODO add your handling code here:
-        frmMantenimientoPuesto vista = new frmmantenimientoPuesto();
+       frmPuesto vista = new frmPuesto();
         vista.setVisible(true);
     }//GEN-LAST:event_frmMantenimientoPuestoActionPerformed
 

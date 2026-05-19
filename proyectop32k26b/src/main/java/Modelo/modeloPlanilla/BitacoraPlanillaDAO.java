@@ -17,49 +17,70 @@ public class BitacoraPlanillaDAO {
 
 
         public void insertarBitacora(
-                int idUsuario,
-                int codigoAplicacion,
-                String accion) {
+            clsBitacoraPlanilla bitacora) {
+
+        Connection conexion = null;
+        PreparedStatement ps = null;
+
+        try {
+
+            conexion = Conexion.getConnection();
+
+            String sql =
+                    "INSERT INTO BitacoraPlanilla "
+                    + "(codigo, accion, tablaAfectada, "
+                    + "descripcion, usuario, fecha) "
+                    + "VALUES (?, ?, ?, ?, ?, NOW())";
+
+            ps = conexion.prepareStatement(sql);
+
+            ps.setInt(1,
+        bitacora.getCodigo());
+
+        ps.setString(2,
+        bitacora.getAccion());
+
+        ps.setString(3,
+        bitacora.getTablaAfectada());
+
+        ps.setString(4,
+        bitacora.getDescripcion());
+
+        ps.setString(5,
+        bitacora.getUsuario());
+
+            ps.executeUpdate();
+
+            System.out.println(
+                    "Bitácora registrada correctamente"
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Error bitacora: "
+                    + e.getMessage()
+            );
+
+        } finally {
 
             try {
 
-                Connection conexion
-                        = Conexion.getConnection();
+                if(ps != null){
+                    ps.close();
+                }
 
-                String sql
-                        = "INSERT INTO bitacora "
-                        + "(UsuId, Aplcodigo, Bitfecha, "
-                        + "Bitip, Bitequipo, Bitaccion) "
-                        + "VALUES (?, ?, NOW(), ?, ?, ?)";
-
-                PreparedStatement ps
-                        = conexion.prepareStatement(sql);
-
-                String ip
-                        = InetAddress.getLocalHost()
-                                .getHostAddress();
-
-                String equipo
-                        = InetAddress.getLocalHost()
-                                .getHostName();
-
-                ps.setInt(1, idUsuario);
-                ps.setInt(2, codigoAplicacion);
-                ps.setString(3, ip);
-                ps.setString(4, equipo);
-                ps.setString(5, accion);
-
-                ps.executeUpdate();
-
-                ps.close();
-                conexion.close();
+                if(conexion != null){
+                    conexion.close();
+                }
 
             } catch (Exception e) {
 
                 System.out.println(
-                        "Error bitacora: "
-                        + e.getMessage());
+                        "Error cerrando conexión: "
+                        + e.getMessage()
+                );
             }
         }
-    
+    }
 }

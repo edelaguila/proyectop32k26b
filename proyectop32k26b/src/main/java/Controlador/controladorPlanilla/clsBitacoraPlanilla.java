@@ -10,6 +10,7 @@ package Controlador.controladorPlanilla;
  */
 public class clsBitacoraPlanilla {
     private int idBitacora;
+    private int codigo;
     private String accion;
     private String tablaAfectada;
     private String descripcion;
@@ -34,6 +35,14 @@ public class clsBitacoraPlanilla {
 
     public void setIdBitacora(int idBitacora) {
         this.idBitacora = idBitacora;
+    }
+    
+    public int getCodigo() {
+    return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+    this.codigo = codigo;
     }
 
     public String getAccion() {

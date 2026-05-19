@@ -189,8 +189,12 @@ public class MdiPlanillas extends javax.swing.JFrame {
         });
         jMenu4.add(frmMantenimientoPerfiles12);
 
-        jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("Consultar BITACORA");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jCheckBoxMenuItem1);
 
         jMenuBar1.add(jMenu4);
@@ -396,6 +400,12 @@ public class MdiPlanillas extends javax.swing.JFrame {
         frmPlanillaEncabezado vista = new frmPlanillaEncabezado();
         vista.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        frmBitacoraPlanilla vista = new frmBitacoraPlanilla();
+        vista.setVisible(true);
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

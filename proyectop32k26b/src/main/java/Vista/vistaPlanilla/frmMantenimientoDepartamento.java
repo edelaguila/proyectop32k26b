@@ -19,6 +19,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import Modelo.modeloPlanilla.BitacoraPlanillaDAO;
+import Controlador.controladorPlanilla.clsBitacoraPlanilla;
 /**
  *
  * @author Meilyn Garcia 9959-23-17838
@@ -291,6 +293,32 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
         int resultado = dao.insertarDepartamento(departamento, bitacora);
 
         if (resultado > 0) {
+            
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6001);
+
+            bitacoraPlanilla.setAccion("Registrar");
+
+            bitacoraPlanilla.setTablaAfectada("Departamento");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se registró un Departamento"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            cargarTabla();
+            
             JOptionPane.showMessageDialog(null, "Registro guardado");
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
@@ -346,6 +374,31 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
                 = dao.obtenerDepartamentoPorId(id, bitacora);
 
         if (departamento != null) {
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6001);
+
+            bitacoraPlanilla.setAccion("Busar");
+
+            bitacoraPlanilla.setTablaAfectada("Departamento");
+
+            bitacoraPlanilla.setDescripcion(
+            "Busqueda en Departamento"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            
 
             txtCodigo.setText(
                     String.valueOf(departamento.getDepcodigo()));
@@ -397,6 +450,32 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
                 = dao.actualizarDepartamento(departamento, bitacora);
 
         if (resultado > 0) {
+            
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6001);
+
+            bitacoraPlanilla.setAccion("Modificar");
+
+            bitacoraPlanilla.setTablaAfectada("Departamento");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se modifico un Departamento"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            cargarTabla();
 
             JOptionPane.showMessageDialog(null,
                     "Registro modificado");
@@ -431,6 +510,33 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
                 = dao.eliminarDepartamento(departamento, bitacora);
 
         if (resultado > 0) {
+            
+            
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6001);
+
+            bitacoraPlanilla.setAccion("Eliminar");
+
+            bitacoraPlanilla.setTablaAfectada("Departamento");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se elimino un Departamento"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            cargarTabla();
 
             JOptionPane.showMessageDialog(null,
                     "Registro eliminado");
@@ -464,7 +570,7 @@ public class frmMantenimientoDepartamento extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
 
         try {
-
+            
             Connection conn = Conexion.getConnection();
 
             String ruta = "src/main/java/Reportes/ReportesPlanilla/departamento.jasper";

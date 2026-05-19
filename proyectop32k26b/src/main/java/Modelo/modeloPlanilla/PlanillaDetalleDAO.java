@@ -1,183 +1,148 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Modelo.modeloPlanilla;
 
 import Controlador.controladorPlanilla.clsPlanillaDetalle;
-import Controlador.clsBitacora;
+import Controlador.clsBitacora; // Mantengo la bitácora como en tu base
+import Modelo.Conexion;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import Modelo.Conexion;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Meilyn Garcia
+ * DAO para planilladetalle basado en la estructura de PuestoDAO
  */
 public class PlanillaDetalleDAO {
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
 
-    // INSERTAR
-    public boolean insertar(clsPlanillaDetalle d) {
+    private static final String SQL_SELECT = "SELECT detcodigo, placodigo, empcodigo, detsalario, dettotalpercepciones, dettotaldeducciones, detliquido FROM planilladetalle";
+    private static final String SQL_INSERT = "INSERT INTO planilladetalle (placodigo, empcodigo, detsalario, dettotalpercepciones, dettotaldeducciones, detliquido) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE planilladetalle SET placodigo=?, empcodigo=?, detsalario=?, dettotalpercepciones=?, dettotaldeducciones=?, detliquido=? WHERE detcodigo=?";
+    private static final String SQL_DELETE = "DELETE FROM planilladetalle WHERE detcodigo=?";
+    private static final String SQL_SELECT_ID = "SELECT detcodigo, placodigo, empcodigo, detsalario, dettotalpercepciones, dettotaldeducciones, detliquido FROM planilladetalle WHERE detcodigo=?";
 
-        String sql = "INSERT INTO planilladetalle "
-                + "(Placodigo, Empcodigo, Detsalario, Dettotalpercepciones, Dettotaldeducciones, Detliquido) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
-
+    public int insertarPlanillaDetalle(clsPlanillaDetalle detalle, clsBitacora bitacora) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int rows = 0;
         try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-
-            // 🔥 cálculo automático recomendado
-            double liquido = d.getDetsalario()
-                    + d.getDettotalpercepciones()
-                    - d.getDettotaldeducciones();
-
-            d.setDetliquido(liquido);
-
-            ps.setInt(1, d.getPlacodigo());
-            ps.setInt(2, d.getEmpcodigo());
-            ps.setDouble(3, d.getDetsalario());
-            ps.setDouble(4, d.getDettotalpercepciones());
-            ps.setDouble(5, d.getDettotaldeducciones());
-
-            ps.setDouble(6, d.getDetliquido());
-
-            ps.executeUpdate();
-            return true;
-
-        } catch (SQLException e) {
-            System.out.println("Error INSERT planilla detalle: " + e.getMessage());
-            return false;
+            conn = Conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_INSERT);
+            stmt.setInt(1, detalle.getPlacodigo());
+            stmt.setInt(2, detalle.getEmpcodigo());
+            stmt.setDouble(3, detalle.getDetsalario());
+            stmt.setDouble(4, detalle.getDettotalpercepciones());
+            stmt.setDouble(5, detalle.getDettotaldeducciones());
+            stmt.setDouble(6, detalle.getDetliquido());
+            rows = stmt.executeUpdate();
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        } finally { 
+            cerrarConexion(null, stmt, conn); 
         }
+        return rows;
     }
 
-    // LISTAR
-    public List<clsPlanillaDetalle> listar() {
-
-        List<clsPlanillaDetalle> lista = new ArrayList<>();
-
-        String sql = "SELECT * FROM planilladetalle";
-
+    public int actualizarPlanillaDetalle(clsPlanillaDetalle detalle, clsBitacora bitacora) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int rows = 0;
         try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                clsPlanillaDetalle d = new clsPlanillaDetalle();
-
-                d.setDetcodigo(rs.getInt("Detcodigo"));
-                d.setPlacodigo(rs.getInt("Placodigo"));
-                d.setEmpcodigo(rs.getInt("Empcodigo"));
-                d.setDetsalario(rs.getDouble("Detsalario"));
-                d.setDettotalpercepciones(rs.getDouble("Dettotalpercepciones"));
-                d.setDettotaldeducciones(rs.getDouble("Dettotaldeducciones"));
-                d.setDetliquido(rs.getDouble("Detliquido"));
-
-                lista.add(d);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error LISTAR planilla detalle: " + e.getMessage());
+            conn = Conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_UPDATE);
+            stmt.setInt(1, detalle.getPlacodigo());
+            stmt.setInt(2, detalle.getEmpcodigo());
+            stmt.setDouble(3, detalle.getDetsalario());
+            stmt.setDouble(4, detalle.getDettotalpercepciones());
+            stmt.setDouble(5, detalle.getDettotaldeducciones());
+            stmt.setDouble(6, detalle.getDetliquido());
+            stmt.setInt(7, detalle.getDetcodigo());
+            rows = stmt.executeUpdate();
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        } finally { 
+            cerrarConexion(null, stmt, conn); 
         }
-
-        return lista;
+        return rows;
     }
 
-    // BUSCAR
-    public clsPlanillaDetalle buscar(int id) {
-
-        String sql = "SELECT * FROM planilladetalle WHERE Detcodigo=?";
-
+    public int eliminarPlanillaDetalle(clsPlanillaDetalle detalle, clsBitacora bitacora) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int rows = 0;
         try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
+            conn = Conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_DELETE);
+            stmt.setInt(1, detalle.getDetcodigo());
+            rows = stmt.executeUpdate();
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        } finally { 
+            cerrarConexion(null, stmt, conn); 
+        }
+        return rows;
+    }
 
+    public clsPlanillaDetalle obtenerPlanillaDetallePorId(int id, clsBitacora bitacora) {
+        clsPlanillaDetalle detalle = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_ID);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
             if (rs.next()) {
-
-                clsPlanillaDetalle d = new clsPlanillaDetalle();
-
-                d.setDetcodigo(rs.getInt("Detcodigo"));
-                d.setPlacodigo(rs.getInt("Placodigo"));
-                d.setEmpcodigo(rs.getInt("Empcodigo"));
-                d.setDetsalario(rs.getDouble("Detsalario"));
-                d.setDettotalpercepciones(rs.getDouble("Dettotalpercepciones"));
-                d.setDettotaldeducciones(rs.getDouble("Dettotaldeducciones"));
-                d.setDetliquido(rs.getDouble("Detliquido"));
-
-                return d;
+                detalle = new clsPlanillaDetalle();
+                detalle.setDetcodigo(rs.getInt("detcodigo"));
+                detalle.setPlacodigo(rs.getInt("placodigo"));
+                detalle.setEmpcodigo(rs.getInt("empcodigo"));
+                detalle.setDetsalario(rs.getDouble("detsalario"));
+                detalle.setDettotalpercepciones(rs.getDouble("dettotalpercepciones"));
+                detalle.setDettotaldeducciones(rs.getDouble("dettotaldeducciones"));
+                detalle.setDetliquido(rs.getDouble("detliquido"));
             }
-
-        } catch (SQLException e) {
-            System.out.println("Error BUSCAR planilla detalle: " + e.getMessage());
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        } finally { 
+            cerrarConexion(rs, stmt, conn); 
         }
-
-        return null;
+        return detalle;
     }
 
-    // ACTUALIZAR
-    public boolean actualizar(clsPlanillaDetalle d) {
-
-        String sql = "UPDATE planilladetalle SET "
-                + "Placodigo=?, Empcodigo=?, Detsalario=?, "
-                + "Dettotalpercepciones=?, Dettotaldeducciones=?, Detliquido=? "
-                + "WHERE Detcodigo=?";
-
-        try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-
-            double liquido = d.getDetsalario()
-                    + d.getDettotalpercepciones()
-                    - d.getDettotaldeducciones();
-
-            d.setDetliquido(liquido);
-
-            ps.setInt(1, d.getPlacodigo());
-            ps.setInt(2, d.getEmpcodigo());
-            ps.setDouble(3, d.getDetsalario());
-            ps.setDouble(4, d.getDettotalpercepciones());
-            ps.setDouble(5, d.getDettotaldeducciones());
-            ps.setDouble(6, d.getDetliquido());
-            ps.setInt(7, d.getDetcodigo());
-
-            ps.executeUpdate();
-            return true;
-
-        } catch (SQLException e) {
-            System.out.println("Error UPDATE planilla detalle: " + e.getMessage());
-            return false;
+    public DefaultTableModel listarPlanillaDetalleEnTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Cód. Detalle");
+        modelo.addColumn("Cód. Planilla");
+        modelo.addColumn("Cód. Empleado");
+        modelo.addColumn("Salario");
+        modelo.addColumn("Líquido");
+        
+        try (Connection conn = Conexion.getConnection(); 
+             Statement st = conn.createStatement(); 
+             ResultSet rs = st.executeQuery(SQL_SELECT)) {
+            
+            while (rs.next()) {
+                modelo.addRow(new Object[]{
+                    rs.getInt("detcodigo"), 
+                    rs.getInt("placodigo"), 
+                    rs.getInt("empcodigo"),
+                    rs.getDouble("detsalario"),
+                    rs.getDouble("detliquido")
+                });
+            }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
         }
+        return modelo;
     }
 
-    // ELIMINAR
-    public boolean eliminar(int id) {
-
-        String sql = "DELETE FROM planilladetalle WHERE Detcodigo=?";
-
-        try {
-            con = Conexion.getConnection();
-            ps = con.prepareStatement(sql);
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
-
-            return true;
-
-        } catch (SQLException e) {
-            System.out.println("Error DELETE planilla detalle: " + e.getMessage());
-            return false;
+    private void cerrarConexion(ResultSet rs, PreparedStatement stmt, Connection conn) {
+        try { 
+            if (rs != null) rs.close(); 
+            if (stmt != null) stmt.close(); 
+            if (conn != null) conn.close(); 
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
         }
     }
 }

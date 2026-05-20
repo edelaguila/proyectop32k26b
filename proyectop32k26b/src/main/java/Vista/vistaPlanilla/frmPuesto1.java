@@ -6,6 +6,8 @@ package Vista.vistaPlanilla;
 import Modelo.modeloPlanilla.PuestoDAO;
 import Controlador.controladorPlanilla.clsPuesto;
 import Controlador.clsBitacora;
+import Controlador.controladorPlanilla.clsBitacoraPlanilla;
+import Modelo.modeloPlanilla.BitacoraPlanillaDAO;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -14,9 +16,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author andre
  */
-public class frmPuesto extends javax.swing.JFrame {
+public class frmPuesto1 extends javax.swing.JFrame {
 
-  public frmPuesto() {
+  public frmPuesto1() {
         initComponents(); // Llama al código que ya tienes abajo
         this.setLocationRelativeTo(null); // Centra la ventana
         llenarTabla(); // Carga los datos de la DB a la tabla
@@ -280,6 +282,34 @@ public class frmPuesto extends javax.swing.JFrame {
 
         // VALIDAR RESULTADO
         if (puesto != null) {
+            
+                  
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6002);
+
+            bitacoraPlanilla.setAccion("Buscar");
+
+            bitacoraPlanilla.setTablaAfectada("Puestos");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se ha realizado una busqueda en puestos"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            
+            
 
             CodigoPuesto.setText(
                     String.valueOf(
@@ -423,6 +453,36 @@ public class frmPuesto extends javax.swing.JFrame {
 
         if (resultado > 0) {
 
+            
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6002);
+
+            bitacoraPlanilla.setAccion("Modificar");
+
+            bitacoraPlanilla.setTablaAfectada("Puestos");
+
+            bitacoraPlanilla.setDescripcion(
+            "Modificacion en puestos"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            
+            llenarTabla();
+            
+            
+            
             JOptionPane.showMessageDialog(
                     null,
                     "Registro modificado"
@@ -482,6 +542,36 @@ public class frmPuesto extends javax.swing.JFrame {
         int resultado = dao.insertarPuesto(puesto, bitacora);
 
         if (resultado > 0) {
+            
+                  
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6002);
+
+            bitacoraPlanilla.setAccion("Registrar");
+
+            bitacoraPlanilla.setTablaAfectada("Puestos");
+
+            bitacoraPlanilla.setDescripcion(
+            "Registro en puestos"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            
+            llenarTabla();
+            
+            
             JOptionPane.showMessageDialog(null, "Registro guardado correctamente");
             // ... (limpiar campos)
         } else {
@@ -523,6 +613,33 @@ public class frmPuesto extends javax.swing.JFrame {
             int resultado = dao.eliminarPuesto(puesto, bitacora);
 
             if (resultado > 0) {
+                      
+                
+            
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6002);
+
+            bitacoraPlanilla.setAccion("Eliminar");
+
+            bitacoraPlanilla.setTablaAfectada("Puestos");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se ha eliminado un puesto"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );    
+            
+            llenarTabla();
+            
                 JOptionPane.showMessageDialog(null, "Registro eliminado correctamente");
 
                 // 3. Limpiar campos y refrescar la tabla visual
@@ -568,20 +685,21 @@ public class frmPuesto extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmPuesto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmPuesto1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmPuesto().setVisible(true);
+                new frmPuesto1().setVisible(true);
             }
         });
     }

@@ -7,6 +7,7 @@ package Vista.vistaPlanilla;
 import Controlador.clsBitacora;
 import Controlador.controladorPlanilla.clsEmpleados;
 import Controlador.clsUsuarioConectado;
+import Controlador.controladorPlanilla.clsBitacoraPlanilla;
 import Modelo.BitacoraDAO;
 import Modelo.Conexion;
 import Modelo.modeloPlanilla.EmpleadosDAO;
@@ -25,6 +26,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
+import Modelo.modeloPlanilla.BitacoraPlanillaDAO;
+import Controlador.controladorPlanilla.clsBitacoraPlanilla;
 
 /**
  *
@@ -218,7 +221,7 @@ public class frmMantenimientoEmpleado extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Mantenimiento De Emplados");
+        jLabel1.setText("Mantenimiento De Empleados");
 
         btnAyuda.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnAyuda.setText("?");
@@ -414,6 +417,30 @@ public class frmMantenimientoEmpleado extends javax.swing.JFrame {
             int resultado = dao.eliminarEmpleado(empleado, bitacora);
 
             if(resultado > 0){
+                
+        BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6003);
+
+            bitacoraPlanilla.setAccion("Eliminar");
+
+            bitacoraPlanilla.setTablaAfectada("empleados");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se elimino un empleado"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );
+
+            
 
                 JOptionPane.showMessageDialog(null,
                     "Empleado eliminado");
@@ -533,8 +560,31 @@ public class frmMantenimientoEmpleado extends javax.swing.JFrame {
             int resultado = dao.insertarEmpleado(empleado, bitacora);
 
             if(resultado > 0){
+                
+            BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
 
-                JOptionPane.showMessageDialog(null, "Empleado registrado");
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6003);
+
+            bitacoraPlanilla.setAccion("Registrar");
+
+            bitacoraPlanilla.setTablaAfectada("empleados");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se registró un empleado"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );
+
+            
+
 
                 llenadoDeTablas();
 
@@ -586,6 +636,30 @@ public class frmMantenimientoEmpleado extends javax.swing.JFrame {
             clsEmpleados empleado = dao.obtenerEmpleadoPorId(id, bitacora);
 
             if(empleado != null){
+                
+            BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6003);
+
+            bitacoraPlanilla.setAccion("Buscar");
+
+            bitacoraPlanilla.setTablaAfectada("empleados");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se Busqueda un empleado"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );
+
+               
 
                 txtCodigo.setText(String.valueOf(empleado.getEmpcodigo()));
 
@@ -678,6 +752,30 @@ public class frmMantenimientoEmpleado extends javax.swing.JFrame {
             int resultado = dao.actualizarEmpleado(empleado, bitacora);
 
             if(resultado > 0){
+                
+            BitacoraPlanillaDAO daoBitacora =
+            new BitacoraPlanillaDAO();
+
+            clsBitacoraPlanilla bitacoraPlanilla =
+            new clsBitacoraPlanilla();
+
+            bitacoraPlanilla.setCodigo(6003);
+
+            bitacoraPlanilla.setAccion("Modificar");
+
+            bitacoraPlanilla.setTablaAfectada("empleados");
+
+            bitacoraPlanilla.setDescripcion(
+            "Se modificacion un empleado"
+            );
+
+            bitacoraPlanilla.setUsuario("admin");
+
+            daoBitacora.insertarBitacora(
+            bitacoraPlanilla
+            );
+
+               
 
                 JOptionPane.showMessageDialog(null, "Empleado modificado");
 

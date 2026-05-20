@@ -7,18 +7,22 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import Controlador.ComisionesVentas.clsReportes;
+import Modelo.ComisionesVentas.BitacoraComisionesDAO;
 import Modelo.ComisionesVentas.ReportesDAO;
 /**
  *
  * @author Jorge Reyes
  */
 public class frmReportes extends javax.swing.JInternalFrame {
-
+    int idUsuario = Controlador.clsUsuarioConectado.getUsuId();
+    private static final int Aplcodigo = 7000;
     /**
      * Creates new form frmReportes
      */
     public frmReportes() {
         initComponents();
+        BitacoraComisionesDAO bitacoraDAO = new BitacoraComisionesDAO();    
+        bitacoraDAO.insert(idUsuario, Aplcodigo, "INGRESO CONSULTA REPORTE");
         
     }
 

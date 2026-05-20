@@ -5,6 +5,7 @@
 
 package Vista.ComisionVenta;
 import Controlador.clsUsuarioConectado;
+import Modelo.ComisionesVentas.BitacoraComisionesDAO;
 import Modelo.PermisosDAO;
 import Vista.ComisionVenta.frmCalculoComisiones;
 import Vista.frmLogin;
@@ -20,7 +21,8 @@ import javax.swing.JOptionPane;
  * @author Angel R
  */
 public class frmComisionesVentas extends javax.swing.JFrame {
-
+    int idUsuario = Controlador.clsUsuarioConectado.getUsuId();
+    private static final int Aplcodigo = 7000;
     /**
      * Creates new form frmComisionesVentas
      */
@@ -30,6 +32,8 @@ public class frmComisionesVentas extends javax.swing.JFrame {
         this.setExtendedState(frmComisionesVentas.MAXIMIZED_BOTH);
         this.setTitle("");
         cerrar();
+        BitacoraComisionesDAO bitacoraDAO = new BitacoraComisionesDAO();    
+        bitacoraDAO.insert(idUsuario, Aplcodigo, "INGRESO A MDI COMISIONES");
 
     }
 

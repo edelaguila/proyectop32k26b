@@ -4,6 +4,7 @@
  */
 package Vista.ComisionVenta;
 
+import Modelo.ComisionesVentas.BitacoraComisionesDAO;
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -20,12 +21,15 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author giron
  */
 public class frmreportescomisiones extends javax.swing.JInternalFrame {
-
+    int idUsuario = Controlador.clsUsuarioConectado.getUsuId();
+    private static final int Aplcodigo = 7000;
     /**
      * Creates new form frmreportescomisiones
      */
     public frmreportescomisiones() {
         initComponents();
+        BitacoraComisionesDAO bitacoraDAO = new BitacoraComisionesDAO();    
+        bitacoraDAO.insert(idUsuario, Aplcodigo, "INGRESO CONSULTA REPORTE");
     }
 
     /**

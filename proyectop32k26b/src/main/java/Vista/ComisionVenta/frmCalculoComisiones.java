@@ -4,6 +4,8 @@
  */
 package Vista.ComisionVenta;
 import Controlador.ComisionesVentas.clsComisionVentas;
+import Modelo.ComisionesVentas.BitacoraComisionesDAO;
+import Controlador.ComisionesVentas.clsBitacoraComisionesVenta;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import Modelo.ComisionesVentas.comisionesVentasDAO;
@@ -14,6 +16,8 @@ import javax.swing.JOptionPane;
  */
 public class frmCalculoComisiones extends javax.swing.JInternalFrame {
     comisionesVentasDAO dao = new comisionesVentasDAO();
+    int idUsuario = Controlador.clsUsuarioConectado.getUsuId();
+    private static final int Aplcodigo = 7000;
     
     /**
      * Creates new form frmCalculoComisiones
@@ -27,7 +31,9 @@ public class frmCalculoComisiones extends javax.swing.JInternalFrame {
     for (clsComisionVentas v : vendedores) {
     cmbnomempleado.addItem(v.getVenid() + " - " + v.getVennombre());
 }
-     cargarHistorialTablaAbajo(); 
+     cargarHistorialTablaAbajo();
+     BitacoraComisionesDAO bitacoraDAO = new BitacoraComisionesDAO();    
+    bitacoraDAO.insert(idUsuario, Aplcodigo, "INGRESO CALCULO COMISIONES");
     }
 
     /**
@@ -619,6 +625,8 @@ try {
 
     private void btnregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregistrarActionPerformed
         // TODO add your handling code here:       
+        BitacoraComisionesDAO bitacoraDAO = new BitacoraComisionesDAO();    
+        bitacoraDAO.insert(idUsuario, Aplcodigo, "REGISTROS CALCULO COMISIONES");
   try {
         // 1. Validar que se haya realizado un cálculo previo
         if (txtResultado.getText().trim().isEmpty()) {

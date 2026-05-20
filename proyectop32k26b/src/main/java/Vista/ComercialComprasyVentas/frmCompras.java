@@ -35,32 +35,48 @@ public class frmCompras extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frmCompras.class.getName());
     private static final int APL_CODIGO = 3001;
+    
+    private java.util.Map<String, Integer> mapaProductos = new java.util.HashMap<>();
+    
     /**
      * Creates new form frmCompras
      */
     public frmCompras() {
-        initComponents();
-        cargarTablaDetalles();
-        cargarTablaFacturas();
-        cargarComboProveedores();
-        cargarComboProductos();
-        cargarPermisos();
+       initComponents();
+
+    // Cargar la información desde la Base de Datos
+    cargarComboProveedores();
+    cargarComboProductos();
+    
+    // Forzar la selección del primer elemento para activar el evento del precio
+    if (comboProducto.getItemCount() > 0) {
+        comboProducto.setSelectedIndex(0); 
+    }
+
+    cargarTablaDetalles();
+    cargarTablaFacturas();
+    cargarPermisos();
+    
     }
      public void cargarPermisos() {
     int usuId = clsUsuarioConectado.getUsuId();
     PermisosDAO permisosDAO = new PermisosDAO();
 
-    //METODO PARA EL SISTEMA DE SEGURIDAD DE PERMISOS AGREGAR A SUS FORMULARIOS CORRESPONDIENTES
-    // Todos usan código 10 = Mantenimiento Usuario
-    Insert.setEnabled( permisosDAO.puedeInsertar (usuId, 3000) );
-    
-    Query.setEnabled  ( permisosDAO.puedeBuscar   (usuId, 3000) );
-    //actualizar
-    Update.setEnabled( permisosDAO.puedeModificar(usuId, 3000) );
-    //delete
-    Delete.setEnabled( permisosDAO.puedeEliminar(usuId, 3000) );
-    //Reporte
-    jButton1.setEnabled( permisosDAO.puedeReportar (usuId, 3000) );
+    if (usuId == 1) { 
+        // Si es el usuario 1 (Administrador), activar todo directamente
+        Insert.setEnabled(true);
+        Query.setEnabled(true);
+        Updatebt.setEnabled(true);
+        Delete.setEnabled(true);
+        jButton1.setEnabled(true);
+    } else {
+        // Para cualquier otro usuario, consultar la matriz de permisos de la BD (Capa Seguridad)
+        Insert.setEnabled(permisosDAO.puedeInsertar(usuId, 3001)); // Cambiado a 3001 que es tu APL_CODIGO
+        Query.setEnabled(permisosDAO.puedeBuscar(usuId, 3001));
+        Updatebt.setEnabled(permisosDAO.puedeModificar(usuId, 3001));
+        Delete.setEnabled(permisosDAO.puedeEliminar(usuId, 3001));
+        jButton1.setEnabled(permisosDAO.puedeReportar(usuId, 3001));
+    }
 }
      
     private void cargarTablaFacturas() {
@@ -168,7 +184,7 @@ private void cargarTablaDetalles() {
 } 
    private void cargarComboProveedores() {
 
-    comboProveedor.removeAllItems();
+   comboProveedor.removeAllItems();
 
     String sql = "SELECT Procodigo, Pronombre FROM proveedores";
 
@@ -194,8 +210,10 @@ private void cargarTablaDetalles() {
     }
 }
  private void cargarComboProductos() {
-
+//comboProducto.removeAllItems();
+    
     comboProducto.removeAllItems();
+    mapaProductos.clear(); // Limpiamos el mapa anterior
 
     String sql = "SELECT Prodid, Prodnombre FROM productos";
 
@@ -204,34 +222,43 @@ private void cargarTablaDetalles() {
          ResultSet rs = ps.executeQuery()) {
 
         while (rs.next()) {
-
             int id = rs.getInt("Prodid");
             String nombre = rs.getString("Prodnombre");
+            String textoCombo = id + " - " + nombre;
 
-            comboProducto.addItem(id + " - " + nombre);
+            // 1. Agregamos el texto plano al JComboBox (Feliz NetBeans)
+            comboProducto.addItem(textoCombo);
+            
+            // 2. Guardamos la relación en el mapa de memoria
+            mapaProductos.put(textoCombo, id);
         }
 
     } catch (Exception e) {
         e.printStackTrace();
-
-        JOptionPane.showMessageDialog(
-                null,
-                "Error al cargar productos: " + e.getMessage()
-        );
+        JOptionPane.showMessageDialog(null, "Error al cargar productos: " + e.getMessage());
     }
 }  
  private int obtenerIdCombo(javax.swing.JComboBox<String> combo) {
-
-    String seleccionado = (String) combo.getSelectedItem();
-
-    if (seleccionado == null || seleccionado.trim().isEmpty()) {
-        throw new RuntimeException("Debe seleccionar un dato del combo");
+    if (combo == null || combo.getSelectedItem() == null) {
+        return 0;
     }
 
-    String[] partes = seleccionado.split(" - ");
+    String seleccionado = combo.getSelectedItem().toString().trim();
 
-    return Integer.parseInt(partes[0].trim());
+    // Si está vacío o tiene el texto por defecto de NetBeans, no procesar
+    if (seleccionado.isEmpty() || seleccionado.contains("Item ")) {
+        return 0;
+    }
+
+    try {
+        String[] partes = seleccionado.split(" - ");
+        return Integer.parseInt(partes[0].trim());
+    } catch (Exception e) {
+        return 0;
+    }
 }
+ 
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -248,7 +275,7 @@ private void cargarTablaDetalles() {
         Faccomiva_txt = new javax.swing.JTextField();
         Query = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        Update = new javax.swing.JButton();
+        Updatebt = new javax.swing.JButton();
         Faccomtotal_txt = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -296,8 +323,8 @@ private void cargarTablaDetalles() {
 
         jLabel4.setText("Iva");
 
-        Update.setText("Actualizar");
-        Update.addActionListener(this::UpdateActionPerformed);
+        Updatebt.setText("Actualizar");
+        Updatebt.addActionListener(this::UpdatebtActionPerformed);
 
         Faccomtotal_txt.setEditable(false);
         Faccomtotal_txt.setBackground(new java.awt.Color(204, 204, 204));
@@ -467,7 +494,7 @@ private void cargarTablaDetalles() {
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(Query)
                                             .addGap(18, 18, 18)
-                                            .addComponent(Update, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                                            .addComponent(Updatebt, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(Faccomid_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -548,7 +575,7 @@ private void cargarTablaDetalles() {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(Query)
-                                        .addComponent(Update)))
+                                        .addComponent(Updatebt)))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(5, 5, 5)
                                     .addComponent(jLabel14)
@@ -645,98 +672,86 @@ private void cargarTablaDetalles() {
         }
     }//GEN-LAST:event_QueryActionPerformed
 
-    private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateActionPerformed
-        // TODO add your handling code here:
-        try {
-            // =========================
-            // VALIDAR CAMPOS VACÍOS
-            // =========================
-            if (Faccomid_txt.getText().trim().isEmpty()
-                || Faccomdetid_txt.getText().trim().isEmpty()
-                || Faccomnumero_txt.getText().trim().isEmpty()
-                || Faccomcantidad_txt.getText().trim().isEmpty()
-                || Faccomprecio_txt.getText().trim().isEmpty()
-                || Faccomestado_txt.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
-                return;
-            }
-
-            // =========================
-            // OBTENER DATOS
-            // =========================
-            int faccomid = Integer.parseInt(Faccomid_txt.getText().trim());
-            int faccomdetid = Integer.parseInt(Faccomdetid_txt.getText().trim());
-            double cantidad = Double.parseDouble(Faccomcantidad_txt.getText().trim());
-            double precio = Double.parseDouble(Faccomprecio_txt.getText().trim());
-            //=====================
-            // IDs
-            //=====================
-            int procodigo = obtenerIdCombo(comboProveedor);
-            int prodid = obtenerIdCombo(comboProducto);
-            // =========================
-            // CALCULAR TOTALES
-            // =========================
-            double subtotalDetalle = cantidad * precio;
-
-            double subtotalFactura = subtotalDetalle;
-            double iva = subtotalFactura * 0.12;
-            double total = subtotalFactura + iva;
-
-            Faccomsubtotal_txt.setText(String.format("%.2f", subtotalFactura));
-            Faccomiva_txt.setText(String.format("%.2f", iva));
-            Faccomtotal_txt.setText(String.format("%.2f", total));
-
-            // =========================
-            // OBJETO FACTURA
-            // =========================
-            clsFacturascompras factura = new clsFacturascompras();
-
-            factura.setFaccomid(faccomid);
-            factura.setFaccomnumero(Faccomnumero_txt.getText().trim());
-            factura.setFaccomsubtotal(subtotalFactura);
-            factura.setFaccomiva(iva);
-            factura.setFaccomtotal(total);
-            factura.setFaccomestado(Faccomestado_txt.getText().trim());
-            factura.setProcodigo(procodigo);
-
-            // =========================
-            // OBJETO DETALLE
-            // =========================
-            clsFacturadetallecompras detalle = new clsFacturadetallecompras();
-
-            detalle.setFaccomdetid(faccomdetid);
-            detalle.setFaccomid(faccomid);
-            detalle.setFaccomcantidad(cantidad);
-            detalle.setFaccomprecio(precio);
-            detalle.setFaccomsubtotal(subtotalDetalle);
-            detalle.setProdid(prodid);
-
-            // =========================
-            // ACTUALIZAR EN BD
-            // =========================
-            FacturascomprasDAO facturaDAO = new FacturascomprasDAO();
-            FacturadetallecomprasDAO detalleDAO = new FacturadetallecomprasDAO();
-
-            facturaDAO.update(factura);
-            detalleDAO.update(detalle);
-
-            JOptionPane.showMessageDialog(null, "Factura actualizada correctamente");
-            registrarBitacora("UPDATE:" + faccomid);
-            cargarTablaFacturas();
-            cargarTablaDetalles();
-            limpiarCampos();
-
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(null, "Ingrese valores numéricos válidos");
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+    private void UpdatebtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdatebtActionPerformed
+try {
+        // =========================
+        // VALIDAR CAMPOS VACÍOS
+        // =========================
+        if (Faccomid_txt.getText().trim().isEmpty()
+            || Faccomdetid_txt.getText().trim().isEmpty()
+            || Faccomnumero_txt.getText().trim().isEmpty()
+            || Faccomcantidad_txt.getText().trim().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(null, "Por favor, llene todos los campos requeridos para actualizar.");
+            return;
         }
-    }//GEN-LAST:event_UpdateActionPerformed
+
+        // ========================================================
+        // OBTENER EL ID DIRECTAMENTE DEL COMBOBOX (Sin romper texto)
+        // ========================================================
+        Object itemSeleccionado = comboProducto.getSelectedItem();
+        if (itemSeleccionado == null) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto válido.");
+            return;
+        }
+        
+        // Casteamos el objeto seleccionado a nuestra clase auxiliar
+        clsComboProducto prodSeleccionado = (clsComboProducto) itemSeleccionado;
+        int prodid = prodSeleccionado.getId(); // ¡Listo! Aquí tienes tu ID puro e íntegro.
+
+        // Para el proveedor (si aún no lo cambias, usamos el método anterior temporalmente)
+        int procodigo = obtenerIdCombo(comboProveedor);
+
+        // =========================
+        // RESTO DE TU LÓGICA DE NEGOCIO
+        // =========================
+        int faccomid = Integer.parseInt(Faccomid_txt.getText().trim());
+        int faccomdetid = Integer.parseInt(Faccomdetid_txt.getText().trim());
+        double cantidad = Double.parseDouble(Faccomcantidad_txt.getText().trim());
+        double precio = Double.parseDouble(Faccomprecio_txt.getText().trim());
+
+        double subtotalDetalle = cantidad * precio;
+        double subtotalFactura = subtotalDetalle; 
+        double iva = subtotalFactura * 0.12;
+        double total = subtotalFactura + iva;
+
+        // Cargar objetos
+        clsFacturascompras factura = new clsFacturascompras();
+        factura.setFaccomid(faccomid);
+        factura.setFaccomnumero(Faccomnumero_txt.getText().trim());
+        factura.setFaccomsubtotal(subtotalFactura);
+        factura.setFaccomiva(iva);
+        factura.setFaccomtotal(total);
+        factura.setFaccomestado(Faccomestado_txt.getText().trim().isEmpty() ? "A" : Faccomestado_txt.getText().trim());
+        factura.setProcodigo(procodigo);
+
+        clsFacturadetallecompras detalle = new clsFacturadetallecompras();
+        detalle.setFaccomdetid(faccomdetid);
+        detalle.setFaccomid(faccomid);
+        detalle.setFaccomcantidad(cantidad);
+        detalle.setFaccomprecio(precio);
+        detalle.setFaccomsubtotal(subtotalDetalle);
+        detalle.setProdid(prodid); // Insertamos la ID limpia de la BD
+
+        // Ejecutar DAOs
+        new FacturascomprasDAO().update(factura);
+        new FacturadetallecomprasDAO().update(detalle);
+
+        JOptionPane.showMessageDialog(null, "Factura actualizada correctamente con mapeo de Combo No-String.");
+        registrarBitacora("UPDATE_FAC_COMBO_OBJ:" + faccomid);
+        
+        cargarTablaFacturas();
+        cargarTablaDetalles();
+        limpiarCampos();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Verifique los datos numéricos ingresados.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_UpdatebtActionPerformed
 
     private void Faccomdetid_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Faccomdetid_txtActionPerformed
         // TODO add your handling code here:
@@ -1021,7 +1036,19 @@ private void cargarTablaDetalles() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void comboProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProductoActionPerformed
-        // TODO add your handling code here:
+int idProducto = obtenerIdCombo(comboProducto);
+    
+    if (idProducto > 0) {
+        // Busca el precio correspondiente en la Base de Datos
+        double precio = obtenerPrecioProducto(idProducto);
+        
+        // Lo escribe en el campo de texto de forma automática
+        Faccomprecio_txt.setText(String.format("%.2f", precio));
+    } else {
+        Faccomprecio_txt.setText("");
+    }
+
+// TODO add your handling code here:
     }//GEN-LAST:event_comboProductoActionPerformed
 
     private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
@@ -1054,6 +1081,51 @@ private void cargarTablaDetalles() {
         java.awt.EventQueue.invokeLater(() -> new frmCompras().setVisible(true));
     }
 
+   private double obtenerPrecioProducto(int idProducto) {
+    if (idProducto <= 0) return 0.0;
+    
+    String sql = "SELECT Prodprecioventa FROM productos WHERE Prodid = ?";
+    
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setInt(1, idProducto);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getDouble("Prodprecioventa");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0.0;
+}
+   
+   
+    public class clsComboProducto {
+    private int id;
+    private String nombre;
+
+    public clsComboProducto(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    // Este método es el secreto: es lo que el JComboBox mostrará en pantalla
+    @Override
+    public String toString() {
+        return id + " - " + nombre;
+    }
+}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Calculo;
     private javax.swing.JButton Clean;
@@ -1070,7 +1142,7 @@ private void cargarTablaDetalles() {
     private javax.swing.JTextField Faccomtotal_txt;
     private javax.swing.JButton Insert;
     private javax.swing.JButton Query;
-    private javax.swing.JButton Update;
+    private javax.swing.JButton Updatebt;
     private javax.swing.JComboBox<String> comboProducto;
     private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JTable facturadetallescompras;

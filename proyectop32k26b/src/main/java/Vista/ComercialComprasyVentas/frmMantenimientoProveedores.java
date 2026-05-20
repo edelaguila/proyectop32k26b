@@ -50,7 +50,7 @@ public class frmMantenimientoProveedores extends javax.swing.JFrame {
     PermisosDAO permisosDAO = new PermisosDAO();
     
     private int idUsuarioConectado = clsUsuarioConectado.getUsuId();
-    int Aplcodigo = 30004;
+    int Aplcodigo = 3004;
 
     /**
      * Creates new form frmMantenimientoProveedores
@@ -515,26 +515,43 @@ if (!puedeEliminar()) {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-
-        try {
-    if ((new File("AyudaComprasHelp.chm")).exists()) {
-   
-        Process p = Runtime
-            .getRuntime()
-            .exec("AyudaComprasHelp.chm");
-        p.waitFor();
+try {
+        // Buscar el archivo de ayuda en diferentes ubicaciones
+        String[] rutasPosibles = {
+            "AyudasCompras/AyudaComprasHelp.chm",
+            "src/main/resources/AyudasCompras/AyudaComprasHelp.chm",
+            "AyudaComprasHelp.chm"
+        };
         
-    } else {
+        File archivoAyuda = null;
+        for (String ruta : rutasPosibles) {
+            File temp = new File(ruta);
+            if (temp.exists()) {
+                archivoAyuda = temp;
+                break;
+            }
+        }
         
-        System.out.println("La ayuda no fue encontrada");
-        
+        if (archivoAyuda != null && archivoAyuda.exists()) {
+            // Para Windows
+            if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                Runtime.getRuntime().exec("hh.exe " + archivoAyuda.getAbsolutePath());
+            } else {
+                // Para otros sistemas operativos
+                Runtime.getRuntime().exec("xdg-open " + archivoAyuda.getAbsolutePath());
+            }
+            System.out.println("Ayuda abierta correctamente");
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "El archivo de ayuda no se encuentra disponible.\n" +
+                "Verifique que el archivo 'AyudaComprasHelp.chm' exista.", 
+                "Ayuda no disponible", 
+                JOptionPane.WARNING_MESSAGE);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al abrir la ayuda: " + ex.getMessage());
     }
-    
-    System.out.println("Correcto");
-    
-} catch (Exception ex) {
-    ex.printStackTrace();
-}
         
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -546,33 +563,54 @@ if (!puedeEliminar()) {
     }//GEN-LAST:event_btnSalidaActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-
-        Connection conn = null;
+ Connection conn = null;
     try {
+        conn = Conexion.getConexion();
         
-        conn = Conexion.getConexion(); 
+        if (conn == null) {
+            JOptionPane.showMessageDialog(this, "No se pudo establecer conexión con la base de datos.");
+            return;
+        }
         
-        String rutaReporte = "src/main/java/Reportes/ComprayVentas/reporteProveedores.jrxml";
+        // Buscar el archivo del reporte en diferentes ubicaciones
+        String[] rutasPosibles = {
+            "src/main/java/Reportes/ComprayVentas/reporteProveedores.jrxml",
+            "src/main/resources/Reportes/ComprayVentas/reporteProveedores.jrxml",
+            "Reportes/ComprayVentas/reporteProveedores.jrxml"
+        };
         
-        JasperReport jasperReport = JasperCompileManager.compileReport(rutaReporte);
+        File archivoReporte = null;
+        for (String ruta : rutasPosibles) {
+            File temp = new File(ruta);
+            if (temp.exists()) {
+                archivoReporte = temp;
+                break;
+            }
+        }
         
+        if (archivoReporte == null || !archivoReporte.exists()) {
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró el archivo del reporte.\n" +
+                "Verifique que 'reporteProveedores.jrxml' exista en la carpeta de Reportes.");
+            return;
+        }
+        
+        // Compilar y llenar el reporte
+        JasperReport jasperReport = JasperCompileManager.compileReport(archivoReporte.getAbsolutePath());
         Map<String, Object> parametros = new HashMap<>();
-        
-        // 5. Llenar el reporte con los datos de la DB
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, conn);
         
-        // 6. Mostrar el reporte en una ventana flotante (Viewer)
-        JasperViewer viewer = new JasperViewer(jasperPrint, false); // El 'false' evita que se cierre toda la app al cerrar el reporte
+        // Mostrar el reporte
+        JasperViewer viewer = new JasperViewer(jasperPrint, false);
         viewer.setTitle("Reporte de Proveedores");
         viewer.setVisible(true);
         
         bitacoraDAO.insert(idUsuarioConectado, Aplcodigo, "Generó Reporte de Proveedores");
-
+        
     } catch (Exception ex) {
-        JOptionPane.showMessageDialog(null, "Error al generar el reporte de proveedores: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Error al generar el reporte de proveedores:\n" + ex.getMessage());
         ex.printStackTrace();
     } finally {
-      
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
